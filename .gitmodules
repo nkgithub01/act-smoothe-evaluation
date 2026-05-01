@@ -1,0 +1,6 @@
+[submodule "act"]
+	path = act
+	url = git@github.com:act-compiler/act.git
+[submodule "act-improved"]
+	path = act-improved
+	url = git@github.com:Saatvik-Lochan/act.git
