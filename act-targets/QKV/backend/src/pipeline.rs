@@ -49,7 +49,7 @@ struct AsmCandidate {
     timestamp: Duration,
 }
 
-fn check_termination(best: Option<AsmCandidate>, start: &Instant, output_path: &PathBuf) {
+fn check_termination(best: Option<AsmCandidate>, start: &Instant, output_path: &PathBuf, pii_counter: usize) {
     let current_time = start.elapsed();
     match best {
         Some(AsmCandidate {
@@ -57,7 +57,7 @@ fn check_termination(best: Option<AsmCandidate>, start: &Instant, output_path: &
             cost,
             timestamp,
         }) => {
-            if current_time > timestamp * SATURATION_FACTOR {
+            if pii_counter > 0 || current_time > timestamp * SATURATION_FACTOR {
                 println!(
                     "No improvement for last {:?}, stopping",
                     current_time - timestamp
@@ -264,11 +264,11 @@ fn main() {
     // Start processing the input file
     let start = Instant::now();
 
-    check_termination(best.borrow().clone(), &start, &output_path);
+    check_termination(best.borrow().clone(), &start, &output_path, pii_counter.borrow().clone());
     println!("Starting Phase 1: Instruction Selection...");
     println!();
 
-    check_termination(best.borrow().clone(), &start, &output_path);
+    check_termination(best.borrow().clone(), &start, &output_path, pii_counter.borrow().clone());
     println!("Starting Phase 1 Module 1: E-Graph Initializer...");
     println!();
 
@@ -305,7 +305,7 @@ fn main() {
             .with_hook(move |runner| {
                 PROCESSED.lock().unwrap().clear();
                 if runner.iterations.len() % N == 0 && runner.iterations.len() > 0 {
-                    check_termination(best.borrow().clone(), &start, &output_path_for_hook);
+                    check_termination(best.borrow().clone(), &start, &output_path_for_hook, pii_counter.borrow().clone());
                     println!(
                         "Starting Phase 1 Module 3: Graph Extractor (limit {})",
                         limit
@@ -322,7 +322,7 @@ fn main() {
                     limit += 1; // Increment limit to allow for more extraction next time
 
                     for pii in piis {
-                        check_termination(best.borrow().clone(), &start, &output_path_for_hook);
+                        check_termination(best.borrow().clone(), &start, &output_path_for_hook, pii_counter.borrow().clone());
                         println!("Starting Phase 2 for PII #{}", *pii_counter.borrow());
                         println!();
 
@@ -343,12 +343,12 @@ fn main() {
                         *pii_counter.borrow_mut() += 1;
                     }
 
-                    check_termination(best.borrow().clone(), &start, &output_path_for_hook);
+                    check_termination(best.borrow().clone(), &start, &output_path_for_hook, pii_counter.borrow().clone());
                     println!("Completed Phase 2: Memory Allocation, returning to Phase 1: Instruction Selection");
                     println!();
                 }
 
-                check_termination(best.borrow().clone(), &start, &output_path_for_hook);
+                check_termination(best.borrow().clone(), &start, &output_path_for_hook, pii_counter.borrow().clone());
                 println!(
                     "Starting Phase 1 Module 2: Rewrite Applier (iteration {})",
                     runner.iterations.len() + 1
@@ -377,7 +377,7 @@ fn main() {
             println!();
 
             while start.elapsed() < TIME_LIMIT {
-                check_termination(best.borrow().clone(), &start, &output_path);
+                check_termination(best.borrow().clone(), &start, &output_path, pii_counter.borrow().clone());
                 println!(
                     "Starting Phase 1 Module 3: Graph Extractor (limit {})",
                     limit
@@ -394,7 +394,7 @@ fn main() {
                 limit += 1; // Increment limit to allow for more extraction next time
 
                 for pii in piis {
-                    check_termination(best.borrow().clone(), &start, &output_path);
+                    check_termination(best.borrow().clone(), &start, &output_path, pii_counter.borrow().clone());
                     println!("Starting Phase 2 for PII #{}", *pii_counter.borrow());
                     println!();
 
@@ -412,7 +412,7 @@ fn main() {
                     *pii_counter.borrow_mut() += 1;
                 }
 
-                check_termination(best.borrow().clone(), &start, &output_path);
+                check_termination(best.borrow().clone(), &start, &output_path, pii_counter.borrow().clone());
                 println!("Completed Phase 2: Memory Allocation, returning to Phase 1: Instruction Selection");
                 println!();
 
