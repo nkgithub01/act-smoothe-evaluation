@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: scripts/run_docker.sh --sim|--compile|--setup [-- COMMAND...]
+Usage: scripts/docker.sh --sim|--compile|--setup [-- COMMAND...]
 
 Launch the locally built ACT Docker environment from the repository root.
 --sim and --compile currently use the same core ACT image; the flags are kept
