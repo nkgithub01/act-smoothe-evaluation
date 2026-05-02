@@ -5,4 +5,4 @@ build/
 __pycache__/
 
 act-backends/
-asm
+asm/*
