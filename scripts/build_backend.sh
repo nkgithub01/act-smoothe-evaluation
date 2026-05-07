@@ -3,11 +3,9 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: scripts/build-backend.sh [TARGET]
+Usage: scripts/build_backend.sh [TARGET]
 
-Build the generated backend at targets/<TARGET>/backend and copy the resulting
-binary to backends/<TARGET>.
-
+Build generated backend inside the ACT Docker image.
 Default TARGET: QKV
 EOF
 }
@@ -20,22 +18,26 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 TARGET="${1:-QKV}"
-BACKEND_DIR="${REPO_ROOT}/targets/${TARGET}/backend"
-OUT_DIR="${REPO_ROOT}/backends"
+ARCH="$(uname -m)"
 
-if [[ ! -d "${BACKEND_DIR}" ]]; then
-  echo "error: generated backend not found: ${BACKEND_DIR}" >&2
+case "${ARCH}" in
+  x86_64) IMAGE_NAME="act-alpha:latest-amd64" ;;
+  arm64|aarch64) IMAGE_NAME="act-alpha:latest-arm64" ;;
+  *) echo "error: unsupported architecture: ${ARCH}" >&2; exit 1 ;;
+esac
+
+if ! docker image inspect "${IMAGE_NAME}" >/dev/null 2>&1; then
+  echo "error: local ACT image not found: ${IMAGE_NAME}" >&2
+  echo "Build it first with: docker/build.sh" >&2
   exit 1
 fi
 
-mkdir -p "${OUT_DIR}"
-
-(
-  cd "${BACKEND_DIR}"
-  cargo build --release
-)
-
-cp "${BACKEND_DIR}/target/release/backend" "${OUT_DIR}/${TARGET}"
-chmod +x "${OUT_DIR}/${TARGET}"
-
-echo "Built backend: backends/${TARGET}"
+docker run -it --rm \
+  --gpus all \
+  --name "act-rm-$(id -un)-build-backend" \
+  -v "${REPO_ROOT}:/workspace:rw" \
+  -w "/workspace" \
+  -e HOST_UID="$(id -u)" \
+  -e HOST_GID="$(id -g)" \
+  "${IMAGE_NAME}" \
+  ./scripts/dockerized/build_backend.sh "${TARGET}"

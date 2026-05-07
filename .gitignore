@@ -5,6 +5,7 @@ build/
 __pycache__/
 
 act-backends/
+backends/
 targets/*
 !targets/QKV/
 !targets/QKV/**

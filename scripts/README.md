@@ -1,20 +1,24 @@
-## Run docker environment:
+## Scripts
+
+These scripts launch the ACT Docker image automatically when run from the host.
+No separate `scripts/docker.sh` step is needed.
+
+## Generate backend
 
 ```bash
-docker.sh --compile
+./scripts/generate.sh QKV.py
 ```
 
-### The following commands should be executed in the docker environment
-## Next build backend
+## Build backend
 
 ```bash
-build_backend.sh QKV
+./scripts/build_backend.sh QKV_improved
 ```
 
-## Finally, run the backend to compile a kernel
+## Compile a kernel
 
 ```bash
-compile_hlo.sh QKV attention.hlo
+./scripts/compile_hlo.sh QKV_improved attention.hlo
 ```
 
-'QKV' may be replaced with any backend name.
+Backend names may be replaced with any generated target name.

@@ -5,10 +5,7 @@ usage() {
   cat <<'EOF'
 Usage: scripts/generate.sh [ISA_SPEC.py]
 
-Run a TAIDL ISA spec from the repository root. The spec controls what is
-produced, e.g. oracle/backend generation via qkv.generate_oracle() /
-qkv.generate_backend().
-
+Run backend generation inside the ACT Docker image.
 Default ISA_SPEC.py: QKV.py
 EOF
 }
@@ -21,21 +18,26 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 SPEC="${1:-QKV.py}"
+ARCH="$(uname -m)"
 
-cd "${REPO_ROOT}"
+case "${ARCH}" in
+  x86_64) IMAGE_NAME="act-alpha:latest-amd64" ;;
+  arm64|aarch64) IMAGE_NAME="act-alpha:latest-arm64" ;;
+  *) echo "error: unsupported architecture: ${ARCH}" >&2; exit 1 ;;
+esac
 
-if [[ ! -f "${SPEC}" ]]; then
-  echo "error: ISA spec not found: ${SPEC}" >&2
+if ! docker image inspect "${IMAGE_NAME}" >/dev/null 2>&1; then
+  echo "error: local ACT image not found: ${IMAGE_NAME}" >&2
+  echo "Build it first with: docker/build.sh" >&2
   exit 1
 fi
 
-python "${SPEC}"
-
-TARGET_NAME="$(basename "${SPEC}" .py)"
-GENERATED_DIR="${REPO_ROOT}/targets/${TARGET_NAME}"
-IMPROVED_DIR="${REPO_ROOT}/targets/${TARGET_NAME}_improved"
-
-if [[ -d "${GENERATED_DIR}" ]]; then
-  rm -rf "${IMPROVED_DIR}"
-  mv "${GENERATED_DIR}" "${IMPROVED_DIR}"
-fi
+docker run -it --rm \
+  --gpus all \
+  --name "act-rm-$(id -un)-generate" \
+  -v "${REPO_ROOT}:/workspace:rw" \
+  -w "/workspace" \
+  -e HOST_UID="$(id -u)" \
+  -e HOST_GID="$(id -g)" \
+  "${IMAGE_NAME}" \
+  ./scripts/dockerized/generate.sh "${SPEC}"

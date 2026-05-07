@@ -2,7 +2,7 @@
 
 from taidl import Accelerator
 
-qkv = Accelerator("QKV_new")
+qkv = Accelerator("QKV_new_improved")
 
 
 # Define Data Models
