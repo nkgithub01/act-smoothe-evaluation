@@ -5,8 +5,8 @@ usage() {
   cat <<'EOF'
 Usage: scripts/build-backend.sh [TARGET]
 
-Build the generated backend at act-targets/<TARGET>/backend and copy the resulting
-binary to act-backends/<TARGET>.
+Build the generated backend at targets/<TARGET>/backend and copy the resulting
+binary to backends/<TARGET>.
 
 Default TARGET: QKV
 EOF
@@ -20,8 +20,8 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 TARGET="${1:-QKV}"
-BACKEND_DIR="${REPO_ROOT}/act-targets/${TARGET}/backend"
-OUT_DIR="${REPO_ROOT}/act-backends"
+BACKEND_DIR="${REPO_ROOT}/targets/${TARGET}/backend"
+OUT_DIR="${REPO_ROOT}/backends"
 
 if [[ ! -d "${BACKEND_DIR}" ]]; then
   echo "error: generated backend not found: ${BACKEND_DIR}" >&2
@@ -38,4 +38,4 @@ mkdir -p "${OUT_DIR}"
 cp "${BACKEND_DIR}/target/release/backend" "${OUT_DIR}/${TARGET}"
 chmod +x "${OUT_DIR}/${TARGET}"
 
-echo "Built backend: act-backends/${TARGET}"
+echo "Built backend: backends/${TARGET}"

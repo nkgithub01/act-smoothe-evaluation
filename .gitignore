@@ -5,6 +5,11 @@ build/
 __pycache__/
 
 act-backends/
+targets/*
+!targets/QKV/
+!targets/QKV/**
+!targets/QKV_new/
+!targets/QKV_new/**
 asm
 *.json
 taidl-specs

@@ -30,3 +30,12 @@ if [[ ! -f "${SPEC}" ]]; then
 fi
 
 python "${SPEC}"
+
+TARGET_NAME="$(basename "${SPEC}" .py)"
+GENERATED_DIR="${REPO_ROOT}/targets/${TARGET_NAME}"
+IMPROVED_DIR="${REPO_ROOT}/targets/${TARGET_NAME}_improved"
+
+if [[ -d "${GENERATED_DIR}" ]]; then
+  rm -rf "${IMPROVED_DIR}"
+  mv "${GENERATED_DIR}" "${IMPROVED_DIR}"
+fi
