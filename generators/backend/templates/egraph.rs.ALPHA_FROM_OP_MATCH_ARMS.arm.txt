@@ -1,0 +1,3 @@
+            op if op == "{{op_name}}" && children.len() == 1 => {
+                Ok(TensorOp::{{variant_name}}(children[0]))
+            }

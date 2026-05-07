@@ -1,3 +1,7 @@
+[submodule "taidl"]
+	path = taidl
+	url = https://github.com/Saatvik-Lochan/taidl.git
+	branch = add-alpha
 [submodule "smoothe"]
 	path = smoothe
-	url = git@github.com:cornell-zhang/SmoothE.git
+	url = https://github.com/cornell-zhang/SmoothE

@@ -22,10 +22,10 @@ CMD=()
 
 case "${ARCH}" in
   x86_64)
-    IMAGE_NAME="devanshdvj/act:latest-amd64"
+    IMAGE_NAME="act-alpha:latest-amd64"
     ;;
   arm64|aarch64)
-    IMAGE_NAME="devanshdvj/act:latest-arm64"
+    IMAGE_NAME="act-alpha:latest-arm64"
     ;;
   *)
     echo "error: unsupported architecture: ${ARCH}" >&2

@@ -1,0 +1,5 @@
+
+    let info = TensorInfo { shape: {{shape_vec}}, dtype: {{dtype}}, is_const: false, };
+    let isa_idx = rhs_eclasses.len() - 2;
+    egraph.set_analysis_data(rhs_eclasses[isa_idx], info.clone());
+    egraph.set_analysis_data(*rhs_eclasses.last().unwrap(), info);
