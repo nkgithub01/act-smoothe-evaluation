@@ -57,18 +57,48 @@ git clone --recursive https://github.com/nkgithub01/act-alpha-evaluation
 
 ## Repository Structure
 
+### `QKV.py`, `QKV_new.py`
+
+TAIDL ISA specifications used to generate the alpha/improved QKV backends.
+
+### `cost-models/`
+
+Cost model implementations copied into generated improved backends during generation.
+
 ### `docker/`
 
-Contains scripts and configuration files used to build the Docker development and evaluation environment.
+Dockerfiles and helper scripts for the reproducible ACT evaluation environment.
+
+### `examples/`
+
+Example QKV inputs, expected data files, and HLO kernels for manual experiments.
+
+### `generators/`
+
+ACT tool generators: backend generator code plus the oracle generator submodule.
+
+### `kernels/`
+
+Standalone HLO kernels used by the compile scripts.
 
 ### `scripts/`
 
-Includes helper scripts for backend generation, compilation, and build automation.
+Host-side and in-container wrappers for generation, backend builds, compilation, and test execution.
+
+### `smoothe/`
+
+SmoothE submodule used for extraction/cost-model integration.
+
+### `taidl/`
+
+TAIDL submodule used to define accelerator ISAs and drive ACT code generation.
+
+### `targets/`
+
+Checked-in ACT-generated baseline backends for `QKV` and `QKV_new`; improved targets are generated here.
 
 ### `tests/`
 
-Contains pytest-based validation scripts used to verify correctness of generated and compiled backends.
+Pytest validation suite and generated oracle packages for original and improved backends.
 
-### `backends/`
-
-Stores generated backend implementations and compiled backend artifacts.
+Generated build outputs are written to `backends/` and compiled kernels to `asm/` when the scripts are run.
