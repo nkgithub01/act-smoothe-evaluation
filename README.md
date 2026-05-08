@@ -55,6 +55,16 @@ git clone --recursive https://github.com/nkgithub01/act-alpha-evaluation
 ./scripts/compile_hlo.sh QKV_improved attention.hlo
 ```
 
+### 8. Repo Cleanup
+
+When cleaning up the repo, some files will be owned by the docker container, and cannot be deleted by the normal user.
+
+Use the following command to start bash in the act-alpha docker container
+```bash
+./scripts/enter_docker.sh
+```
+Then remove any unwanted files from inside the docker container.
+
 ## Repository Structure
 
 ### `QKV.py`, `QKV_new.py`
