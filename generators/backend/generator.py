@@ -85,20 +85,20 @@ def generate_backend(accelerator_name: str, instructions: List, data_models: Lis
     print(f"Backend generation complete for {accelerator_name}")
 
     # Build the backend
-    print(f"Building backend for {accelerator_name}")
-    cargo_build_dir = os.path.join(backend_gen_dir, 'target')
-    if os.path.exists(cargo_build_dir):
-        shutil.rmtree(cargo_build_dir)
-    subprocess.run(["cargo", "build", "--release"], cwd=backend_gen_dir,
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-    print(f"Backend build complete for {accelerator_name}")
+    # print(f"Building backend for {accelerator_name}")
+    # cargo_build_dir = os.path.join(backend_gen_dir, 'target')
+    # if os.path.exists(cargo_build_dir):
+    #     shutil.rmtree(cargo_build_dir)
+    # subprocess.run(["cargo", "build", "--release"], cwd=backend_gen_dir,
+    #                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+    # print(f"Backend build complete for {accelerator_name}")
 
-    # Copy built backend to final destination
-    build_backend_path = os.path.join(cargo_build_dir, 'release', 'backend')
-    final_dest_path = os.path.join(base_dir, 'backends', accelerator_name)
-    if os.path.exists(build_backend_path):
-        Path(final_dest_path).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(build_backend_path, final_dest_path)
-        print(f"Final backend binary located at {final_dest_path}")
-    else:
-        raise RuntimeError("Backend build failed. Please check the build logs.")
+    # # Copy built backend to final destination
+    # build_backend_path = os.path.join(cargo_build_dir, 'release', 'backend')
+    # final_dest_path = os.path.join(base_dir, 'backends', accelerator_name)
+    # if os.path.exists(build_backend_path):
+    #     Path(final_dest_path).parent.mkdir(parents=True, exist_ok=True)
+    #     shutil.copy(build_backend_path, final_dest_path)
+    #     print(f"Final backend binary located at {final_dest_path}")
+    # else:
+    #     raise RuntimeError("Backend build failed. Please check the build logs.")
