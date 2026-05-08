@@ -1,8 +1,9 @@
 """QKV Accelerator ISA Definition"""
 
-from taidl import Accelerator
+from act.taidl import Accelerator
+from act.generators import generate_oracle, generate_backend
 
-qkv = Accelerator("QKV_new_improved")
+qkv = Accelerator("QKV")
 
 
 # Define Data Models
@@ -140,6 +141,6 @@ ENTRY softmax {
 }
 """)
 
-# qkv.generate_oracle()
+generate_oracle(qkv)
 
-qkv.generate_backend()
+generate_backend(qkv)

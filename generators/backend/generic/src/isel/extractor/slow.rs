@@ -268,7 +268,7 @@ fn extraction_to_piigraph(
 
         let ec_id = egraph.lookup(op.clone()).unwrap();
         let info = egraph[ec_id].data.clone();
-        let node_id = pii.add_node(op, info, child_node_ids, get_hbm_offset(hbm_offsets, ec_id));
+        let node_id = pii.add_node(op, info, child_node_ids, get_hbm_offset(egraph, hbm_offsets, ec_id));
         idx_map.insert(idx, node_id);
     }
 

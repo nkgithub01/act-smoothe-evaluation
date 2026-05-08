@@ -138,10 +138,16 @@ fn op_repr_en(
     Some(format!("{}({})", label, parts.join(", ")))
 }
 
-pub fn get_hbm_offset(hbm_offsets: &Vec<(Option<Id>, i32)>, eclass: Id) -> Option<i32> {
+pub fn get_hbm_offset(
+    egraph: &EGraph<TensorOp, TensorInfo>,
+    hbm_offsets: &Vec<(Option<Id>, i32)>,
+    eclass: Id,
+) -> Option<i32> {
     for (buf_ec, offset) in hbm_offsets.iter() {
-        if buf_ec.is_some() && buf_ec.unwrap() == eclass {
-            return Some(*offset);
+        if let Some(buf_ec) = buf_ec {
+            if egraph.find(*buf_ec) == eclass {
+                return Some(*offset);
+            }
         }
     }
     None
@@ -185,7 +191,7 @@ pub fn recexpr_to_pii(
             mapped_enode,
             egraph[eclass].data.clone(),
             children,
-            get_hbm_offset(hbm_offsets, eclass),
+            get_hbm_offset(egraph, hbm_offsets, eclass),
         );
         expr_to_pii.insert(expr_id, pii_id);
     }

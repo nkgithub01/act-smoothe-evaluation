@@ -4,7 +4,7 @@ use egg::{CostFunction, EGraph, Extractor, Id, Language, RecExpr};
 
 use crate::ir::egraph::{TensorInfo, TensorOp};
 use crate::ir::pii::PiiGraph;
-use crate::isel::extractor::utils::{get_hbm_offset, recexpr_to_pii};
+use crate::isel::extractor::utils::recexpr_to_pii;
 
 #[derive(Default)]
 struct UnitCost;

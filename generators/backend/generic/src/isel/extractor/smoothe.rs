@@ -147,7 +147,7 @@ fn build_selected_pii_node(
         op,
         egraph[eclass].data.clone(),
         children,
-        get_hbm_offset(hbm_offsets, eclass),
+        get_hbm_offset(egraph, hbm_offsets, eclass),
     );
     eclass_to_pii.insert(eclass, pii_id);
     visiting.remove(&eclass);

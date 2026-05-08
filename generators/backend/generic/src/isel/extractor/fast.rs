@@ -35,7 +35,7 @@ pub fn extract_fast(
         &mut selected,
     );
     if ret {
-        vec![select2pii_graph(&selected, hbm_offsets)]
+        vec![select2pii_graph(egraph, &selected, hbm_offsets)]
     } else {
         vec![]
     }
@@ -118,6 +118,7 @@ fn get_pii_graph(
 /// Convert a HashSet of selected e-nodes into a pii graph.
 /// Algorithm builds the pii graph bottom-up in topological order.
 fn select2pii_graph(
+    egraph: &EGraph<TensorOp, TensorInfo>,
     selected: &HashMap<TensorOp, (Id, TensorInfo)>,
     hbm_offsets: &Vec<(Option<Id>, i32)>,
 ) -> PiiGraph {
@@ -134,7 +135,7 @@ fn select2pii_graph(
                 en.clone(),
                 info.clone(),
                 vec![],
-                get_hbm_offset(hbm_offsets, *ec_id),
+                get_hbm_offset(egraph, hbm_offsets, *ec_id),
             );
             eclass_map.insert(*ec_id, new_id);
             to_remove.push(en.clone());
@@ -162,7 +163,7 @@ fn select2pii_graph(
                     en.clone(),
                     info.clone(),
                     children,
-                    get_hbm_offset(hbm_offsets, *ec_id),
+                    get_hbm_offset(egraph, hbm_offsets, *ec_id),
                 );
                 eclass_map.insert(*ec_id, new_id);
                 to_remove.push(en.clone());

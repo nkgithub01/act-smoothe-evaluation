@@ -37,6 +37,8 @@ if ! docker image inspect "${IMAGE_NAME}" >/dev/null 2>&1; then
   exit 1
 fi
 
+export LD_LIBRARY_PATH="/opt/ortools/lib:${LD_LIBRARY_PATH:-}"
+
 docker run -it --rm \
   --gpus all \
   --name "act-rm-$(id -un)-compile-hlo" \
@@ -44,5 +46,6 @@ docker run -it --rm \
   -w "/workspace" \
   -e HOST_UID="$(id -u)" \
   -e HOST_GID="$(id -g)" \
+  -e LD_LIBRARY_PATH \
   "${IMAGE_NAME}" \
   ./scripts/dockerized/compile_hlo.sh "${BACKEND}" "${INPUT}"

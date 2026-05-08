@@ -287,7 +287,7 @@ fn main() {
 
     let rules = isel::rewrites::get_rewrites();
     let inputs_for_hook = inputs.clone();
-    let hbm_offsets_for_hook = hbm_offsets.clone();
+    let mut hbm_offsets_for_hook = hbm_offsets.clone();
 
     let output_path_for_hook = output_path.clone();
     let log_dir_for_hook = log_dir.clone();
@@ -307,6 +307,12 @@ fn main() {
                 if isel::rewrites::enforce_alpha_injectivity(&mut runner.egraph) {
                     println!("Applied alpha injectivity unions");
                     println!();
+                    // Canonicalize all hbm_offsets after unions
+                    for offset_entry in hbm_offsets_for_hook.iter_mut() {
+                        if let Some(buf_ec) = &mut offset_entry.0 {
+                            *buf_ec = runner.egraph.find(*buf_ec);
+                        }
+                    }
                 }
                 if runner.iterations.len() % N == 0 && runner.iterations.len() > 0 {
                     check_termination(best.borrow().clone(), &start, &output_path_for_hook);
