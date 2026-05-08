@@ -143,10 +143,25 @@ pub fn get_hbm_offset(
     hbm_offsets: &Vec<(Option<Id>, i32)>,
     eclass: Id,
 ) -> Option<i32> {
+    let eclass = egraph.find(eclass);
+
     for (buf_ec, offset) in hbm_offsets.iter() {
-        if let Some(buf_ec) = buf_ec {
-            if egraph.find(*buf_ec) == eclass {
-                return Some(*offset);
+        let Some(buf_ec) = buf_ec else { continue };
+        let buf_ec = egraph.find(*buf_ec);
+
+        if buf_ec == eclass {
+            return Some(*offset);
+        }
+
+        // Improved/alpha extraction removes the alpha-hbm wrapper before PII
+        // generation. Output HBM offsets may therefore be attached to the
+        // wrapper eclass while the extracted PII node is the wrapped store
+        // eclass. Treat alpha-hbm(child) as an offset alias for child.
+        for node in &egraph[buf_ec].nodes {
+            if let TensorOp::AlphaHBM(child) = node {
+                if egraph.find(*child) == eclass {
+                    return Some(*offset);
+                }
             }
         }
     }
