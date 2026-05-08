@@ -140,6 +140,5 @@ ENTRY softmax {
 }
 """)
 
-# qkv.generate_oracle()
-
+qkv.generate_oracle()
 qkv.generate_backend()

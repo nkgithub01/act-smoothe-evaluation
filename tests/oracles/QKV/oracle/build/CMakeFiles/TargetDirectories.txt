@@ -1,0 +1,4 @@
+/workspace/generators/oracle/xla-debug/build/CMakeFiles/print_handler_ext.dir
+/workspace/generators/oracle/xla-debug/build/CMakeFiles/nanobind-static.dir
+/workspace/generators/oracle/xla-debug/build/CMakeFiles/edit_cache.dir
+/workspace/generators/oracle/xla-debug/build/CMakeFiles/rebuild_cache.dir

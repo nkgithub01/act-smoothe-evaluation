@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared  -o print_handler_ext.cpython-310-x86_64-linux-gnu.so CMakeFiles/print_handler_ext.dir/print_handler_main.cc.o  libnanobind-static.a 

@@ -93,5 +93,5 @@ ENTRY softmax {
 """)
 
 # Generate programming APIs and test oracle (functional simulator)
-# qkv.generate_oracle()
+qkv.generate_oracle()
 qkv.generate_backend()

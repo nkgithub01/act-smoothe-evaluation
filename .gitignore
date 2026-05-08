@@ -2,6 +2,8 @@
 
 target/
 build/
+!tests/oracles/**/oracle/build/
+!tests/oracles/**/oracle/build/**
 __pycache__/
 
 act-backends/
