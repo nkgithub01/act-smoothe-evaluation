@@ -11,6 +11,15 @@ This repository contains compiler backends for the hypothetical accelerators `QK
 - `tests/`
   - Includes automated tests to validate backend correctness and compare outputs.
 
+
+### Prerequisites
+
+Before using any scripts or tests, ensure the `act-alpha` Docker container is built:
+
+```bash
+./docker/build.sh
+```
+
 ## Using the Tests Repository
 
 The `tests/` folder is designed to help verify the correctness of generated accelerator backends and compare outputs across backend variants.
